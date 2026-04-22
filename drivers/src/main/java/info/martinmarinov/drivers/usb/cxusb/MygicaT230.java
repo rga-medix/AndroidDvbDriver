@@ -44,6 +44,10 @@ class MygicaT230 extends CxUsbDvbDevice {
         super(usbDevice, context, MYGICA_T230);
     }
 
+    MygicaT230(UsbDevice usbDevice, Context context, DeviceFilter deviceFilter) throws DvbException {
+        super(usbDevice, context, deviceFilter);
+    }
+
     @Override
     public String getDebugString() {
         return MYGICA_NAME;

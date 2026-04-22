@@ -28,6 +28,9 @@
     <usb-device vendor-id="0x0458" product-id="0x707f"/> <!-- Genius TVGo DVB-T03                            -->
     <usb-device vendor-id="0x0572" product-id="0xc688"/> <!-- Mygica T230 DVB-T/T2/C                         -->
     <usb-device vendor-id="0x0572" product-id="0xc689"/> <!-- Mygica T230C DVB-T/T2/C                        -->
+    <usb-device vendor-id="0x0572" product-id="0xc68a"/> <!-- Mygica T230C2 DVB-T/T2/C                       -->
+    <usb-device vendor-id="0x0572" product-id="0xc69a"/> <!-- Mygica T230C2 Lite DVB-T/T2/C                  -->
+    <usb-device vendor-id="0x0572" product-id="0x689a"/> <!-- Mygica T230A DVB-T/T2/C                        -->
     <usb-device vendor-id="0x0bda" product-id="0x2832"/> <!-- Realtek RTL2832U reference design              -->
     <usb-device vendor-id="0x0bda" product-id="0x2838"/> <!-- Realtek RTL2832U reference design              -->
     <usb-device vendor-id="0x0ccd" product-id="0x00a9"/> <!-- TerraTec Cinergy T Stick Black                 -->

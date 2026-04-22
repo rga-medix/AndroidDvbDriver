@@ -73,7 +73,7 @@ public abstract class CxUsbDvbDevice extends AbstractGenericDvbUsbDevice {
 
     public static final int SI2168_MP_NOT_USED = 1;
     public static final int SI2168_MP_A = 2;
-    public static final int  SI2168_MP_B = 3;
+    public static final int SI2168_MP_B = 3;
     public static final int SI2168_MP_C = 4;
     public static final int SI2168_MP_D = 5;
 
@@ -161,6 +161,14 @@ public abstract class CxUsbDvbDevice extends AbstractGenericDvbUsbDevice {
 
         if (rbuf != null) {
             System.arraycopy(data, 0, rbuf, 0, rlen);
+        }
+    }
+
+    synchronized void cxusb_gpio_ctrl(int gpio, int value) throws DvbException {
+        byte[] i = new byte[1];
+        cxusb_ctrl_msg(CMD_GPIO_WRITE, new byte[] { (byte)gpio, (byte)value}, 2, i, 1);
+        if (i[0] != 0x01) {
+            Log.w(TAG, "gpio_write failed for gpio=0x" + Integer.toHexString(gpio));
         }
     }
 

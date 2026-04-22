@@ -59,7 +59,10 @@ Currently:
 * RTL2832 with tuner chip FC0013
 * MyGica T230
 * MyGica (Geniatech) T230C DVB-T/T2/C
+* MyGica (Geniatech) T230C2 DVB-T/T2/C
+* MyGica (Geniatech) T230A DVB-T/T2/C
 * MyGica Pad TV Tuner PT360
+* MyGica (Geniatech) Pad TV Tuner PT362
 * EVOLVEO XtraTV stick (Some unbranded Android DVB-T sticks)
 * PCTV AndroiDTV (78e)
 * Potentially other AF9035 dongles. If your dongle works let me know and I will add it to this list.

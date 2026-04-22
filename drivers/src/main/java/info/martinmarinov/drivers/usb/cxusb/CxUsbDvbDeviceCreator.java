@@ -32,9 +32,18 @@ import info.martinmarinov.drivers.usb.DvbUsbDevice;
 import static info.martinmarinov.drivers.tools.SetUtils.setOf;
 import static info.martinmarinov.drivers.usb.cxusb.MygicaT230.MYGICA_T230;
 import static info.martinmarinov.drivers.usb.cxusb.MygicaT230C.MYGICA_T230C;
+import static info.martinmarinov.drivers.usb.cxusb.MygicaT230A.MYGICA_T230A;
+import static info.martinmarinov.drivers.usb.cxusb.MygicaT230C2.MYGICA_T230C2;
+import static info.martinmarinov.drivers.usb.cxusb.MygicaT230C2.MYGICA_T230C2_LITE;
 
 public class CxUsbDvbDeviceCreator implements DvbUsbDevice.Creator {
-    private final static Set<DeviceFilter> CXUSB_DEVICES = setOf(MYGICA_T230, MYGICA_T230C);
+    private final static Set<DeviceFilter> CXUSB_DEVICES = setOf(
+            MYGICA_T230,
+            MYGICA_T230C,
+            MYGICA_T230C2,
+            MYGICA_T230C2_LITE,
+            MYGICA_T230A
+    );
 
     @Override
     public Set<DeviceFilter> getSupportedDevices() {
@@ -43,14 +52,14 @@ public class CxUsbDvbDeviceCreator implements DvbUsbDevice.Creator {
 
     @Override
     public DvbUsbDevice create(UsbDevice usbDevice, Context context, DeviceFilter filter) throws DvbException {
-        if (MYGICA_T230C.matches(usbDevice)) {
-
+        if(MYGICA_T230A.equals(filter)) {
+            return new MygicaT230A(usbDevice, context, filter);
+        } else if (MYGICA_T230C2.equals(filter) || MYGICA_T230C2_LITE.equals(filter)) {
+            return new MygicaT230C2(usbDevice, context, filter);
+        } else if (MYGICA_T230C.matches(usbDevice)) {
             return new MygicaT230C(usbDevice, context);
-
         } else {
-
             return new MygicaT230(usbDevice, context);
-
         }
     }
 }
