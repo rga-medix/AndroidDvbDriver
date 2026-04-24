@@ -100,6 +100,10 @@ public class Si2168 implements DvbFrontend {
         si2168_cmd_execute(wargs, wlen, 0);
     }
 
+    private boolean useUpstreamTsClockPolarity() {
+        return chip == Si2168Data.Si2168Chip.SI2168_CHIP_ID_D60 || (((version >> 24) & 0xFF) == 'D');
+    }
+
     private synchronized @NonNull byte[] si2168_cmd_execute(@NonNull byte[] wargs, int wlen, int rlen) throws DvbException {
         if (wlen > 0 && wlen == wargs.length) {
             i2c.send(addr, wargs, wlen);
@@ -371,7 +375,12 @@ public class Si2168 implements DvbFrontend {
         si2168_cmd_execute(new byte[] {(byte) 0x14, (byte) 0x00, (byte) 0x09, (byte) 0x10, (byte) 0xe3, (byte) (0x08 | (ts_clock_inv ? 0x00 : 0x10))}, 6, 4);
 
         byte[] cmd = new byte[] {(byte) 0x14, (byte) 0x00, (byte) 0x08, (byte) 0x10, (byte) 0xd7, (byte) 0x05};
-        cmd[5] |= ts_clock_inv ? 0xd7 : 0xcf;
+        if (useUpstreamTsClockPolarity()) {
+            cmd[5] |= ts_clock_inv ? 0x00 : 0x10;
+        } else {
+            // Keep legacy behavior for older non-D devices that are long field-tested.
+            cmd[5] |= ts_clock_inv ? 0xd7 : 0xcf;
+        }
         si2168_cmd_execute(cmd, 6, 4);
 
         si2168_cmd_execute(new byte[] {(byte) 0x14, (byte) 0x00, (byte) 0x01, (byte) 0x12, (byte) 0x00, (byte) 0x00}, 6, 4);
