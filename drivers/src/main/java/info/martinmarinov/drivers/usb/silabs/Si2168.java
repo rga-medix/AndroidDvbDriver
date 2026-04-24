@@ -32,6 +32,7 @@ import static info.martinmarinov.drivers.DvbStatus.FE_HAS_SIGNAL;
 import static info.martinmarinov.drivers.DvbStatus.FE_HAS_SYNC;
 import static info.martinmarinov.drivers.DvbStatus.FE_HAS_VITERBI;
 import static info.martinmarinov.drivers.usb.cxusb.CxUsbDvbDevice.SI2168_ARGLEN;
+import static info.martinmarinov.drivers.usb.cxusb.CxUsbDvbDevice.SI2168_TS_CLK_MANUAL;
 
 import android.content.res.Resources;
 import android.util.Log;
@@ -237,6 +238,12 @@ public class Si2168 implements DvbFrontend {
             version = (((fwVerRaw[9] & 0xFF) + '@') << 24) | (((fwVerRaw[6] & 0xFF) - '0') << 16) | (((fwVerRaw[7] & 0xFF) - '0') << 8) | (fwVerRaw[8] & 0xFF);
             Log.d(TAG, "firmware version: "+((char) ((version >> 24) & 0xff))+" "+((version >> 16) & 0xff)+"."+((version >> 8) & 0xff)+"."+(version & 0xff));
 
+            if (ts_clock_mode == SI2168_TS_CLK_MANUAL) {
+                /* set ts freq to 10Mhz
+                 * for CLK_MANUAL, follow upstream kernel ordering: set TS freq before TS mode. */
+                si2168_cmd_execute(new byte[] {(byte) 0x14, (byte) 0x00, (byte) 0x0d, (byte) 0x10, (byte) 0xe8, (byte) 0x03}, 6, 4);
+            }
+
         	/* set ts mode */
             byte[] args = new byte[] {(byte) 0x14, (byte) 0x00, (byte) 0x01, (byte) 0x10, (byte) 0x00, (byte) 0x00};
             args[4] |= ts_mode;
@@ -246,8 +253,11 @@ public class Si2168 implements DvbFrontend {
             }
             si2168_cmd_execute(args, 6, 4);
 
-            /* set ts freq to 10Mhz*/
-            si2168_cmd_execute(new byte[] {(byte) 0x14, (byte) 0x00, (byte) 0x0d, (byte) 0x10, (byte) 0xe8, (byte) 0x03}, 6, 4);
+            if (ts_clock_mode != SI2168_TS_CLK_MANUAL) {
+                /* set ts freq to 10Mhz
+                 * preserve legacy non-MANUAL behavior until AUTO_* hardware is verified. */
+                si2168_cmd_execute(new byte[] {(byte) 0x14, (byte) 0x00, (byte) 0x0d, (byte) 0x10, (byte) 0xe8, (byte) 0x03}, 6, 4);
+            }
 
             warm = true;
         }

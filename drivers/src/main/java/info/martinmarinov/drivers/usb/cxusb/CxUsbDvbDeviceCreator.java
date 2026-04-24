@@ -52,7 +52,7 @@ public class CxUsbDvbDeviceCreator implements DvbUsbDevice.Creator {
 
     @Override
     public DvbUsbDevice create(UsbDevice usbDevice, Context context, DeviceFilter filter) throws DvbException {
-        if(MYGICA_T230A.equals(filter)) {
+        if (MYGICA_T230A.equals(filter)) {
             return new MygicaT230A(usbDevice, context, filter);
         } else if (MYGICA_T230C2.equals(filter) || MYGICA_T230C2_LITE.equals(filter)) {
             return new MygicaT230C2(usbDevice, context, filter);
