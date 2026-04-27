@@ -81,7 +81,7 @@ class DataHandler extends Thread {
                         }
                     }
 
-                    readB += b.length;
+                    readB += read;
                 } else {
                     try {
                         Thread.sleep(100);
