@@ -145,6 +145,17 @@ public class RequestTest {
         assertThat(response[6], is(0x2838L)); // USB product id
     }
 
+    @Test
+    public void testDisablePidFilter() throws Exception {
+        long[] response = getRawResponse(6);
+
+        assertThat(response.length, is(1));
+        assertThat(response[0], is(1L)); // success
+
+        // verify hardware was called
+        verify(dvbDevice).disablePidFilter();
+    }
+
     /** Helper to do serialization/deserialization to bytes */
     private long[] getRawResponse(int requestOrdinal, long ... reqArgs) {
         try {

@@ -138,6 +138,13 @@ enum Request {
                     (long) dvbDevice.getDeviceFilter().getProductId() // parameter 6
             );
         }
+    }),
+    REQ_DISABLE_PID_FILTER(new Executor() {
+        @Override
+        public Response execute(DvbDevice dvbDevice, long... payload) throws DvbException {
+            dvbDevice.disablePidFilter();
+            return Response.SUCCESS;
+        }
     });
 
     private final static String TAG = Request.class.getSimpleName();
