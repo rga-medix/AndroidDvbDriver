@@ -74,7 +74,7 @@ public class DvbFileDevice extends DvbDevice {
     }
 
     @Override
-    protected void tuneTo(long freqHz, long bandwidthHz, @NonNull DeliverySystem deliverySystem) throws DvbException {
+    protected void tuneTo(long freqHz, long bandwidthHz, @NonNull DeliverySystem deliverySystem, long dvbcSymbolRate) throws DvbException {
         this.isTuned = freqHz == this.freq && bandwidthHz == this.bandwidth;
     }
 

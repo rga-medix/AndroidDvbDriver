@@ -76,9 +76,11 @@ enum Request {
             // Typical value for DVB-T is 8_000_000
             DeliverySystem deliverySystem = DeliverySystem.values()[(int) payload[2]];
             // Check enum for actual values
+	    long dvbcSymbolRate = (payload.length > 3) ? payload[3] : 0L;
+            // DVB-C symbol rate in symbols/sec (e.g. 6_900_000); 0 = use device default
 
             Log.d(TAG, "Client requested tune to " + frequency + " Hz with bandwidth " + bandwidth + " Hz with delivery system " + deliverySystem);
-            dvbDevice.tune(frequency, bandwidth, deliverySystem);
+            dvbDevice.tune(frequency, bandwidth, deliverySystem, dvbcSymbolRate);
             return Response.SUCCESS;
         }
     }),

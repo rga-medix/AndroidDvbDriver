@@ -46,4 +46,7 @@ public interface DvbFrontend {
     Set<DvbStatus> getStatus() throws DvbException;
     void setPids(int ... pids) throws DvbException;
     void disablePidFilter() throws DvbException;
+
+    // Optional: called before setParams() to set DVB-C symbol rate (default no-op)
+    default void setDvbcSymbolRate(long symbolRate) {}
 }

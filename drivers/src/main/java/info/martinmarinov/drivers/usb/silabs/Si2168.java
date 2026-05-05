@@ -63,7 +63,7 @@ public class Si2168 implements DvbFrontend {
     private final static int TIMEOUT_MS = 70;
     private final static int NO_STREAM_ID_FILTER = 0xFFFFFFFF;
     private final static int DVBT2_STREAM_ID = 0;
-    private final static int DVBC_SYMBOL_RATE = 0;
+    private final static long DEFAULT_DVBC_SYMBOL_RATE = 6_900_000L;
 
     private final Resources resources;
     private final I2cAdapter i2c;
@@ -81,6 +81,7 @@ public class Si2168 implements DvbFrontend {
     private Si2168Data.Si2168Chip chip;
     private DvbTuner tuner;
     private DeliverySystem deliverySystem;
+    private long dvbcSymbolRate = DEFAULT_DVBC_SYMBOL_RATE;
 
     private boolean hasLockStatus = false;
 
@@ -353,7 +354,7 @@ public class Si2168 implements DvbFrontend {
         if (deliverySystem == DeliverySystem.DVBC) {
             //noinspection PointlessBitwiseExpression
             si2168_cmd_execute(new byte[] {
-                    (byte) 0x14, (byte) 0x00, (byte) 0x02 , (byte) 0x11, (byte) (((DVBC_SYMBOL_RATE / 1000) >> 0) & 0xff), (byte) ( ((DVBC_SYMBOL_RATE / 1000) >> 8) & 0xff)
+                    (byte) 0x14, (byte) 0x00, (byte) 0x02 , (byte) 0x11, (byte) (((dvbcSymbolRate / 1000) >> 0) & 0xff), (byte) ( ((dvbcSymbolRate / 1000) >> 8) & 0xff)
             }, 6, 4);
         }
 
@@ -463,6 +464,10 @@ public class Si2168 implements DvbFrontend {
 
     public I2cAdapter.I2GateControl gateControl() {
         return gateControl;
+    }
+
+    public void setDvbcSymbolRate(long symbolRate) {
+        this.dvbcSymbolRate = (symbolRate > 0) ? symbolRate : DEFAULT_DVBC_SYMBOL_RATE;
     }
 
     private final I2cAdapter.I2GateControl gateControl = new I2cAdapter.I2GateControl() {

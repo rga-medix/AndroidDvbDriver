@@ -177,8 +177,11 @@ public abstract class DvbUsbDevice extends DvbDevice {
     }
 
     @Override
-    protected void tuneTo(final long freqHz, final long bandwidthHz, @NonNull final DeliverySystem deliverySystem) throws DvbException {
+    protected void tuneTo(final long freqHz, final long bandwidthHz, @NonNull final DeliverySystem deliverySystem, final long dvbcSymbolRate) throws DvbException {
         Check.notNull(frontend, "Frontend not initialized");
+        if (dvbcSymbolRate > 0) {
+            frontend.setDvbcSymbolRate(dvbcSymbolRate);
+        }
         retry(RETRIES, new ThrowingRunnable<DvbException>() {
             @Override
             public void run() throws DvbException {

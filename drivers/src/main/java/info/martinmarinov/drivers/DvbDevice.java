@@ -57,11 +57,15 @@ public abstract class DvbDevice implements Closeable {
     // Debug string to identify device for debugging purposes
     public abstract String getDebugString();
 
-    protected abstract void tuneTo(long freqHz, long bandwidthHz, @NonNull DeliverySystem deliverySystem) throws DvbException;
+    protected abstract void tuneTo(long freqHz, long bandwidthHz, @NonNull DeliverySystem deliverySystem, long dvbcSymbolRate) throws DvbException;
+
+    public final void tune(long freqHz, long bandwidthHz, @NonNull DeliverySystem deliverySystem, long dvbcSymbolRate) throws DvbException {
+        tuneTo(freqHz, bandwidthHz, deliverySystem, dvbcSymbolRate);
+        if (dvbDemux != null) dvbDemux.reset();
+    }
 
     public final void tune(long freqHz, long bandwidthHz, @NonNull DeliverySystem deliverySystem) throws DvbException {
-        tuneTo(freqHz, bandwidthHz, deliverySystem);
-        if (dvbDemux != null) dvbDemux.reset();
+        tune(freqHz, bandwidthHz, deliverySystem, 0L);
     }
 
     public int readDroppedUsbFps() throws DvbException {
